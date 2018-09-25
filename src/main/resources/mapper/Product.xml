@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bee.auto.dao.ProductDAO">
+  <resultMap type="com.bee.auto.bean.Product" id="Product">
+    <id column="pr_id" jdbcType="INTEGER" property="prId"/>
+    <result column="pr_name" jdbcType="VARCHAR" property="prName"/>
+    <result column="pr_content" jdbcType="VARCHAR" property="prContent"/>
+      <result column="price" jdbcType="DOUBLE" property="price"/>
+      <result column="stock_num" jdbcType="INTEGER" property="stockNum"/>
+      <result column="sale_num" jdbcType="INTEGER" property="saleNum"/>
+  </resultMap>
+  
+  <select id="queryProList" parameterType="com.bee.auto.bean.Product" resultMap="Product">
+    SELECT pr_id,pr_name,pr_content,price,stock_num,sale_num FROM product
+    <where>
+    	<if test="prName != null and !&quot;&quot;.equals(prName.trim())">
+	    	AND pr_name LIKE '%' #{prName} '%'
+	    </if>
+    </where>
+  </select>
+</mapper>

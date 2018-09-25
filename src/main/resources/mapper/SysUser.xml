@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bee.auto.dao.ISysUser">
+    <resultMap type="com.bee.auto.bean.SysUser" id="SysUser">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="pswd" jdbcType="VARCHAR" property="pswd"/>
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid"/>
+        <result column="headimgurl" jdbcType="VARCHAR" property="headimgurl"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="sex" jdbcType="INTEGER" property="sex"/>
+    </resultMap>
+
+    <select id="getSysUser" parameterType="com.bee.auto.bean.SysUser" resultMap="SysUser">
+        select * from SYS_USER
+        <where>
+            <if test="username != null and !&quot;&quot;.equals(username.trim())">
+                and username=#{username}
+            </if>
+            <if test="pswd != null and !&quot;&quot;.equals(pswd.trim())">
+                and pswd=#{pswd}
+            </if>
+            <if test="openid != null and !&quot;&quot;.equals(openid.trim())">
+                and openid=#{openid}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addSysUser" parameterType="com.bee.auto.bean.SysUser">
+        insert into SYS_USER (username,email,pswd,create_time) values (#{username},#{email},#{pswd},now())
+    </insert>
+
+    <insert id="addWXInfo" parameterType="com.bee.auto.bean.SysUser">
+        insert into SYS_USER (create_time,openid,headimgurl,nickname,city,province,country,sex) values (now(),#{openid},#{headimgurl},#{nickname},#{city},#{province},#{country},#{sex})
+    </insert>
+
+    <!-- 修改用户信息 -->
+    <update id="motifySysUser" parameterType="com.bee.auto.bean.SysUser">
+        update SYS_USER set pswd=#{pswd} where username=#{username}
+    </update>
+    <!-- 修改用户信息openid -->
+    <update id="motifyWXInfo" parameterType="com.bee.auto.bean.SysUser">
+        update SYS_USER set openid=#{openid},headimgurl=#{headimgurl},nickname=#{nickname},city=#{city},province=#{province},country=#{country},sex=#{sex} where username=#{username}
+    </update>
+</mapper>
